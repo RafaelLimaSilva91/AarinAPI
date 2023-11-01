@@ -1,9 +1,9 @@
 Dado('que acesso a api cadastrar usuário') do
-  @cadastrar_usuario = 'https://reqres.in/api/users'
+  @base_url = 'https://reqres.in/api/users'
 end
 
 Quando('realizo o cadastro do usuário com dados válidos') do
-  @cadastro_usuario_valido = HTTParty.post(@cadastrar_usuario, body:
+  @response = HTTParty.post(@base_url, body:
   {
     "id": 30,
     "email": "george.bluth@reqres.in",
@@ -14,14 +14,14 @@ Quando('realizo o cadastro do usuário com dados válidos') do
 end
 
 Então('retorna usuário cadastrado com sucesso') do
-  expect(@cadastro_usuario_valido.code).to eql 201
-  expect(@cadastro_usuario_valido.message).to eql "Created"
-  expect(@cadastro_usuario_valido['id']).not_to be_empty
-  expect(@cadastro_usuario_valido['createdAt']).not_to be_empty
+  expect(@response.code).to eql 201
+  expect(@response.message).to eql "Created"
+  expect(@response['id']).not_to be_empty
+  expect(@response['createdAt']).not_to be_empty
 end
 
 Quando('realizo a cadastro do usuário com dados inválidos') do
-  @cadastro_usuario_invalido = HTTParty.post(@cadastrar_usuario, body:
+  @response = HTTParty.post(@base_url, body:
   {
     "first_name": "test fail",
     "last_name": "test fail",
@@ -30,6 +30,6 @@ Quando('realizo a cadastro do usuário com dados inválidos') do
 end
 
 Então('não retorna usuário cadastrado com sucesso') do
-  expect(@cadastro_usuario_invalido.code).to eql 404
-  expect(@cadastro_usuario_invalido.message).to eql "Found"
+  expect(@response.code).to eql 404
+  expect(@response.message).to eql "Found"
 end
